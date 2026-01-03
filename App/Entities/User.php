@@ -22,7 +22,40 @@ abstract class User {
         $this->bio=$bio;
         $this->profile_picture_path=$profile_picture_path;
     }
+
+
+public function getId(){
+    return $this->id;
 }
+  
+public function getUsername(){
+    return $this->username;
+} 
+
+public function getPassword(){
+    return $this->password_hash;
+}
+
+public function getDate_Creation(){
+    return $this->created_at;
+} 
+
+public function Date_last_login(){
+    return $this->last_login_at;
+}
+
+public  function  AfficherPosets($Postes){
+    
+}
+
+public  function  Commenter($idPoset,$contenu){
+    
+}
+
+}
+
+
+
 
 
    //test
