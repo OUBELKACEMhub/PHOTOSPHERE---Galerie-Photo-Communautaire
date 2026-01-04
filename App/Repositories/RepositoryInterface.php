@@ -1,10 +1,12 @@
 <?php
 
-interface Repository{
+interface RepositoryInterface{
 
-    public function findById():void;
-     public function save(User $user): bool;
-    public function getAllUsers(): array;
+    public function findByUsername($username = null);
+    public function findById($id);
+
+    //  public function add($user): bool;
+    //  public function Update($user): array;
 }
 
 ?>
