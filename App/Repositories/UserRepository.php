@@ -112,9 +112,18 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
     //     echo "user is updating";
     //     return false;
     // }
+
+
+
+     public function  delete($id){
+    $pdo = Database::getConnection();
+
+    $sql="DELETE FROM USERS WHERE id= :id";
+    $stmt->execute(':id'=>$id);
+ }
 }
 
-function FindUser(RepositoryInterface $repo) {
+public function FindUser(RepositoryInterface $repo) {
    if($repo->findByUsername("amine_dev")) {
        echo "User l'qinah f l'array!";
    } else {
@@ -122,13 +131,16 @@ function FindUser(RepositoryInterface $repo) {
    }
 }
 
-function FindUserid(RepositoryInterface $repo) {
+public function FindUserid(RepositoryInterface $repo) {
    if($repo->findById(2)) {
        echo "User de id=1 l'qinah f l'array!";
    } else {
        echo "User ma-kaynch.";
    }
 }
+
+
+
 
 $repo = new UserRepository();
 FindUser($repo);
@@ -139,3 +151,9 @@ $user1=new BasicUser('ahmed', 'oubelkacem.@gmail.com', '$2y$10$abcdefg12345', 'P
 $repo->add($user1);
 echo " \nApret\n";
 $repo->afficherAllUsers();
+
+ $repo->login("ahmed", "12345678"); //connected
+
+
+
+
