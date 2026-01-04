@@ -13,8 +13,10 @@ try {
     die("Erreur de récupération des users : " . $e->getMessage());
 }
 
+
 class UserRepository implements RepositoryInterface {
-   private array $users= []; 
+   private array $users= [];
+   private $current_user=null; 
     public function __construct(){
         try {
             $pdo = Database::getConnection();
@@ -57,10 +59,54 @@ class UserRepository implements RepositoryInterface {
       return false;
     }
 
-    // public function add($user){
-    //     echo "user adding";
-    //     return true;
-    // }
+    public function add($user){
+            try {
+$pdo = Database::getConnection();
+$sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_path, role) 
+                VALUES (:username, :email, :password_hash, :bio, :path, :role)";        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':username'      => $user->getUsername(), 
+            ':email'         => $user->getEmail(),
+            ':password_hash' => $user->getPasswordHash(),
+            ':bio'           => $user->getBio(),
+            ':path'          => $user->getProfilePicturePath(),
+            ':role'          => $user->getRole()
+        ]);
+         if (session_status() === PHP_SESSION_NONE) {
+            session_start();}
+
+    } catch (PDOException $e) {
+        $error = "Erreur : " . $e->getMessage();
+    }
+    }
+
+
+     public function login($usernameInput, $passwordInput) {
+        foreach ($this->users as $user) {
+            if ( $user->getUsername() === $usernameInput && $user->getPasswordHash() === $passwordInput ) 
+                {
+                $this->current_user = $user;
+                $_SESSION['user_id'] = $user->getId();
+                $_SESSION['username'] = $user->getUsername();
+                
+                echo "connected \n";
+                return;
+            }
+        }
+       echo "eshec de connection \n";
+    }
+
+    public function logout(){
+        $this->current=null;
+        session_unset();
+    }
+
+
+    public function afficherAllUsers(){
+        foreach($this->users as $user){
+            echo $user->getUsername()."->".$user->getRole(). "\n";      
+        }
+    }
 
     // public function Update($user){
     //     echo "user is updating";
@@ -87,3 +133,9 @@ function FindUserid(RepositoryInterface $repo) {
 $repo = new UserRepository();
 FindUser($repo);
 FindUserid($repo);
+echo "\n Avant \n";
+$repo->afficherAllUsers();
+$user1=new BasicUser('ahmed', 'oubelkacem.@gmail.com', '$2y$10$abcdefg12345', 'PHP Developer', '/img/amine.jpg', 'BasicUser', 3, '2025-12-15', NULL, 0);
+$repo->add($user1);
+echo " \nApret\n";
+$repo->afficherAllUsers();
