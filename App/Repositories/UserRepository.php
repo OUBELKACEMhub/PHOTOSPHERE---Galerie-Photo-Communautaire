@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../Repositories/RepositoryInterface.php";
 require_once __DIR__ . "/../Entities/User.php";
 require_once __DIR__ . "/../Entities/BasicUser.php";
+require_once __DIR__ . "/../Entities/ProUser.php";
 require_once __DIR__ . "/../../config/Core/Database.php";
 
 try {
@@ -89,7 +90,7 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
                 $_SESSION['user_id'] = $user->getId();
                 $_SESSION['username'] = $user->getUsername();
                 
-                echo "connected \n";
+                echo $user->getUsername()." ->connected \n";
                 return;
             }
         }
@@ -108,10 +109,10 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
         }
     }
 
-    // public function Update($user){
-    //     echo "user is updating";
-    //     return false;
-    // }
+    public function Update($user){
+        echo "user is updating";
+        return false;
+    }
 
 
 
@@ -119,11 +120,17 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
     $pdo = Database::getConnection();
 
     $sql="DELETE FROM USERS WHERE id= :id";
-    $stmt->execute(':id'=>$id);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id' => $id]);
  }
+
+
+
+
+
 }
 
-public function FindUser(RepositoryInterface $repo) {
+function FindUser(RepositoryInterface $repo) {
    if($repo->findByUsername("amine_dev")) {
        echo "User l'qinah f l'array!";
    } else {
@@ -131,16 +138,13 @@ public function FindUser(RepositoryInterface $repo) {
    }
 }
 
-public function FindUserid(RepositoryInterface $repo) {
+function FindUserid(RepositoryInterface $repo) {
    if($repo->findById(2)) {
        echo "User de id=1 l'qinah f l'array!";
    } else {
        echo "User ma-kaynch.";
    }
 }
-
-
-
 
 $repo = new UserRepository();
 FindUser($repo);
@@ -153,6 +157,11 @@ echo " \nApret\n";
 $repo->afficherAllUsers();
 
  $repo->login("ahmed", "12345678"); //connected
+ $repo->delete(2); //delete sara
+ echo "\n";
+ $repo->afficherAllUsers();
+
+
 
 
 
