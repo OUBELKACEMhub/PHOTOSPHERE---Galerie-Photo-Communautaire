@@ -47,16 +47,34 @@ class UserRepository implements RepositoryInterface {
     public function add($user){
             try {
 $pdo = Database::getConnection();
-$sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_path, role) 
-                VALUES (:username, :email, :password_hash, :bio, :path, :role)";        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':username'      => $user->getUsername(), 
+$sql = "INSERT INTO users (
+                    username, email, password_hash, role, bio, 
+                    profile_picture_path, created_at, last_login_at, 
+                    monthly_upload_count, subscription_start_date, 
+                    subscription_end_date, moderator_level, is_super_admin
+                ) VALUES (
+                    :username, :email, :password_hash, :role, :bio, 
+                    :path, :created_at, :last_login_at, 
+                    :upload_count, :sub_start, :sub_end, :mod_level, :is_admin
+                )";      
+                  $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+            ':username'      => $user->getUsername(),
             ':email'         => $user->getEmail(),
             ':password_hash' => $user->getPasswordHash(),
+            ':role'          => $user->getRole(),
             ':bio'           => $user->getBio(),
             ':path'          => $user->getProfilePicturePath(),
-            ':role'          => $user->getRole()
+            ':created_at'    => $user->getDate_Creation() ,
+            ':last_login_at' => $user->getDate_last_login(),
+            ////
+            ':upload_count'  => method_exists($user, 'getMonthlyUploadCount') ? $user->getMonthlyUploadCount() : 0,
+            ':sub_start'     => method_exists($user, 'getSubscriptionStartDate') ? $user->getSubscriptionStartDate() : null,
+            ':sub_end'       => method_exists($user, 'getSubscriptionEndDate') ? $user->getSubscriptionEndDate() : null,
+            ':mod_level'     => method_exists($user, 'getModeratorLevel') ? $user->getModeratorLevel() : null,
+            ':is_admin'      => method_exists($user, 'getIsSuperAdmin') ? ($user->is_super_admin() ? 1 : 0) : 0
         ]);
+        echo "user was adding to db!";
          if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
