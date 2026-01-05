@@ -7,9 +7,8 @@ interface RepositoryInterface{
     public function add($user);
     public function login($usernameInput, $passwordInput);
     public function logout();
-    public function Update($user);
+    // public function Update($user);
     public function  delete($id);
-    //  public function Update($user): array;
 }
 
 ?>
