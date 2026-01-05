@@ -32,7 +32,7 @@ class UserFactory {
                     $data['username'], $data['email'], $data['password_hash'], 
                     $data['bio'], $data['profile_picture_path'], $data['role'],
                     $data['monthly_upload_count'], $data['last_upload_reset_date'],
-                    $data['moderator_level'], $data['isSuperAdmin']
+                    $data['moderator_level'], $data['is_super_admin']
                 );
 
             case 'Administrator':
