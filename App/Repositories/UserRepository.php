@@ -3,17 +3,10 @@ require_once __DIR__ . "/../Repositories/RepositoryInterface.php";
 require_once __DIR__ . "/../Entities/User.php";
 require_once __DIR__ . "/../Entities/BasicUser.php";
 require_once __DIR__ . "/../Entities/ProUser.php";
+require_once __DIR__ . "/../Entities/Moderator.php";
+require_once __DIR__ . "/../Entities/Administrator.php";
 require_once __DIR__ . "/../../config/Core/Database.php";
-
-try {
-    $pdo = Database::getConnection();
-         $sql="SELECT * FROM users";
-        $stmt = $pdo->query($sql);
-       $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Erreur de récupération des users : " . $e->getMessage());
-}
-
+require_once __DIR__. "/../Services/UserFactory.php"; 
 
 class UserRepository implements RepositoryInterface {
    private array $users= [];
@@ -26,16 +19,7 @@ class UserRepository implements RepositoryInterface {
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($rows as $row) {
-                $this->users[] = new BasicUser(
-                    $row['username'],
-                    $row['email'],
-                    $row['password_hash'],
-                    $row['bio'],
-                    $row['profile_picture_path'],
-                    $row['role'],
-                    $row['monthly_upload_count'],
-                    $row['last_upload_reset_date']
-                );
+                $this->users[] = UserFactory::create($row);  
             }
         } catch (PDOException $e) {
             die("Erreur SQL : " . $e->getMessage());
@@ -74,7 +58,8 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
             ':role'          => $user->getRole()
         ]);
          if (session_status() === PHP_SESSION_NONE) {
-            session_start();}
+            session_start();
+        }
 
     } catch (PDOException $e) {
         $error = "Erreur : " . $e->getMessage();
@@ -109,9 +94,46 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
         }
     }
 
-    public function Update($user){
-        echo "user is updating";
-        return false;
+    public function UpdateUser($id){
+       foreach($this->users as $user){
+        if($user->getId()==$id){
+                        try {
+                $pdo = Database::getConnection();
+                $sql="UPDATE users 
+                set username=:username,
+                    email=:email,
+                    password_hash=:password_hash,
+                    role=:role,
+                    created_at=:created_at,
+                    last_login_at=:last_login_at,
+                    bio=:bio,
+                    profile_picture_path=:profile_picture_path
+
+                WHERE id= :id
+                
+                ";
+                $stmt=$pdo->prepare($sql);
+                $stmt->exucute([
+                    ':username'             => $user->getUsername(),
+                    ':email'                => $user->getEmail(),
+                    ':password_hash'        => $user->getPasswordHash(),
+                    ':role'                 => $user->getRole(),
+                    ':created_at'           => $user->getDate_Creation(),
+                    ':last_login_at'        => $user->getDate_last_login(),
+                    ':bio'                  => $user->getBio(),
+                    ':profile_picture_path' => $user->getProfilePicturePath(),
+                    ':id'                   => $user->getId()
+                ]);
+            return true;
+            } catch (PDOException $e) {
+                error_log($e->getMessage());
+                return false;
+            }
+        }
+
+        echo "user introuvable!!!";
+       }
+
     }
 
 
@@ -123,9 +145,6 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id' => $id]);
  }
-
-
-
 
 
 }
@@ -156,10 +175,13 @@ $repo->add($user1);
 echo " \nApret\n";
 $repo->afficherAllUsers();
 
- $repo->login("ahmed", "12345678"); //connected
+//  $repo->login("ahmed", "12345678"); //connected
  $repo->delete(2); //delete sara
  echo "\n";
  $repo->afficherAllUsers();
+
+
+
 
 
 
