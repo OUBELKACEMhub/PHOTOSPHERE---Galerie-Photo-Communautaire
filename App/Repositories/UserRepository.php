@@ -149,36 +149,36 @@ $sql = "INSERT INTO users (username, email, password_hash, bio, profile_picture_
 
 }
 
-function FindUser(RepositoryInterface $repo) {
-   if($repo->findByUsername("amine_dev")) {
-       echo "User l'qinah f l'array!";
-   } else {
-       echo "User ma-kaynch.";
-   }
-}
+// function FindUser(RepositoryInterface $repo) {
+//    if($repo->findByUsername("amine_dev")) {
+//        echo "User l'qinah f l'array!";
+//    } else {
+//        echo "User ma-kaynch.";
+//    }
+// }
 
-function FindUserid(RepositoryInterface $repo) {
-   if($repo->findById(2)) {
-       echo "User de id=1 l'qinah f l'array!";
-   } else {
-       echo "User ma-kaynch.";
-   }
-}
+// function FindUserid(RepositoryInterface $repo) {
+//    if($repo->findById(2)) {
+//        echo "User de id=1 l'qinah f l'array!";
+//    } else {
+//        echo "User ma-kaynch.";
+//    }
+// }
 
-$repo = new UserRepository();
-FindUser($repo);
-FindUserid($repo);
-echo "\n Avant \n";
-$repo->afficherAllUsers();
-$user1=new BasicUser('ahmed', 'oubelkacem.@gmail.com', '$2y$10$abcdefg12345', 'PHP Developer', '/img/amine.jpg', 'BasicUser', 3, '2025-12-15', NULL, 0);
-$repo->add($user1);
-echo " \nApret\n";
-$repo->afficherAllUsers();
+// $repo = new UserRepository();
+// FindUser($repo);
+// FindUserid($repo);
+// echo "\n Avant \n";
+// $repo->afficherAllUsers();
+// $user1=new BasicUser('ahmed', 'oubelkacem.@gmail.com', '$2y$10$abcdefg12345', 'PHP Developer', '/img/amine.jpg', 'BasicUser', 3, '2025-12-15', NULL, 0);
+// $repo->add($user1);
+// echo " \nApret\n";
+// $repo->afficherAllUsers();
 
-//  $repo->login("ahmed", "12345678"); //connected
- $repo->delete(2); //delete sara
- echo "\n";
- $repo->afficherAllUsers();
+// //  $repo->login("ahmed", "12345678"); //connected
+//  $repo->delete(2); //delete sara
+//  echo "\n";
+//  $repo->afficherAllUsers();
 
 
 
