@@ -32,7 +32,7 @@ public function getUsername(){
     return $this->username;
 } 
 
-public function getPassword(){
+public function getPasswordHash(){
     return $this->password_hash;
 }
 
@@ -40,19 +40,30 @@ public function getDate_Creation(){
     return $this->created_at;
 } 
 
-public function Date_last_login(){
+public function getDate_last_login(){
     return $this->last_login_at;
 }
 
-public  function  AfficherPosets($Postes){
-    
+
+public function getBio(){
+    return $this->bio;
 }
 
-public  function  Commenter($idPoset,$contenu){
-    
+public function getProfilePicturePath(){
+    return $this->profile_picture_path;
+}
+
+public function getRole(){
+    return $this->role;
+}
+
+public function getEmail(){
+    return $this->email;
 }
 
 }
+
+
 
 
 
