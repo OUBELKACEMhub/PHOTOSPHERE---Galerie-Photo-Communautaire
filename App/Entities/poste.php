@@ -7,13 +7,14 @@ class Post {
     private string $imageLink;
     private ?int $fileSize;
     private ?string $dimensions;
-    private ?string $state; // 'draft', 'published', 'archived'
+    private ?string $state; 
     private int $viewCount;
     private ?string $publishedAt;
     private ?string $createdAt;
     private ?string $updatedAt;
     private int $userId;
     private ?int $albumId;
+    
     
     public function __construct(array $data) {
         $this->id = $data['id'] ?? 0;
@@ -26,7 +27,7 @@ class Post {
         $this->viewCount = $data['viewCount'] ?? 0;
         $this->publishedAt = $data['publishedAt'] ?? null;
         $this->createdAt = $data['createdAt'] ?? null;
-        $this->updatedAt = $data['updatedAt'] ?? null;
+        $this->updatedAt = $data['updatedAt'] ?? date("YYYY-DD-MM h:m:s");
         $this->userId = $data['userId'] ?? 0;
         $this->albumId = $data['albumId'] ?? null;
     }
