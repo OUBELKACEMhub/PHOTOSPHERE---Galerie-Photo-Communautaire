@@ -24,7 +24,6 @@ public function getAllAlbums(): array {
 }
 
 
-
 public function Title_is_Unique($title):bool{
      $tab=$this->getAllAlbums();
      $tr=0;
@@ -82,27 +81,8 @@ function findPost($id){
        $stmt->execute([':id'=>$id]);
       return  $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
-function findAlbum($id){
-       $pdo = Database::getConnection();
-       $sql="SELECT * FROM album where id=:id";
-       $stmt=$pdo->prepare($sql);
-       $stmt->execute([':id'=>$id]);
-      return  $stmt->fetch(PDO::FETCH_ASSOC);
-} 
-
-
-
- public function addPhotoToAlbum(int $album_id, int $postId, int $userId): bool{
-              $post=findPost($postId);
-     $sql = "UPDATE postes set album_id=:album_id,updated_at=NOW() where id=:id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':album_id'     => $album_id,
-                ':id'       => $postId
-            ]);
-            echo "ajouter Post sur album avec succees!";  
- }     
+  
+ 
 
 }
 
