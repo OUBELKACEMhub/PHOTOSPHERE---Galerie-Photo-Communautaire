@@ -2,7 +2,7 @@
 
 class Tag {
     private int $id;
-    private string $slug;
+    private string $name;
     private int $photoCount;
     
     public function __construct(array $data) {
