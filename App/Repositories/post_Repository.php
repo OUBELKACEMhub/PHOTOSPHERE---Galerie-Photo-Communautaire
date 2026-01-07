@@ -127,25 +127,7 @@ public function creatTag($id,$contenu){
 }
 
 
-public function addTagToPhoto_tags( Tag $tag,Post $post11){
-    try{
-      $pdo = Database::getConnection();
-     $tag=new Tag(); 
-      foreach($photo_tags as $phT){
-        if($post->getId()==$post11->getId()){
-            $sql="INSERT INTO photo_tags(id_tag,id_post )  VALUES (:id_tag,:id_post) ";
-             $stmt = $pdo->prepare($sql);
-             $stmt->execute([
-            ':id_tag' => $tag->getIdTag(),
-            ':id_post' => $tag->getIdPost()]);
-        }
-      }
-      
-    }catch(PDOException $e) {
-        $error = "Erreur : " . $e->getMessage();
-       $pdo -> rollback(); 
-    }
-}
+
 
 
 
